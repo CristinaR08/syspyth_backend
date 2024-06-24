@@ -50,7 +50,7 @@ def create_tables():
         apellido VARCHAR(100) NOT NULL,
         correo VARCHAR(100) NOT NULL,
         carrera VARCHAR(100), 
-        numero_maquina VARCHAR(20) UNIQUE NOT NULL,
+        numero_maquina VARCHAR(20) NOT NULL,
         sala VARCHAR(10) NOT NULL,
         fecha_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         confirmacion BOOLEAN DEFAULT FALSE

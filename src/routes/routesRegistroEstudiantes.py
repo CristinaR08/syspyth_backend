@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from database.db import execute_query, fetch_one, fetch_all
-from datetime import datetime
+from datetime import datetime, timedelta
 
 registro_estudiantes_routes = Blueprint('registro_estudiantes_routes', __name__)
 
@@ -25,6 +25,18 @@ def registrar_estudiante():
     apellido_estudiante = estudiante['apellido']
     correo = estudiante['correo']
     carrera = estudiante['carrera']
+
+    # Verificar si ya existe un registro con la misma cédula en los últimos 45 minutos
+    query_check = '''
+    SELECT * FROM registro_estudiantes 
+    WHERE cedula = %s AND fecha_hora >= %s
+    '''
+    tiempo_limite = fecha_hora - timedelta(minutes=45)
+    registro_reciente = fetch_one(query_check, (cedula, tiempo_limite))
+
+    if registro_reciente:
+        return jsonify({'error': 'Estudiante ya registrado, intente nuevamente en 45 minutos'}), 400
+
 
     # Insertar datos en la tabla registro_estudiantes
     query_insert = '''
