@@ -1,10 +1,10 @@
 from flask import Blueprint, request, jsonify
 from database.db import execute_query, fetch_all, fetch_one
 
-routes_estudiates = Blueprint('routes_estudiante', __name__)
+routes_estudiantes = Blueprint('routes_estudiante', __name__)
 
 #POST
-@routes_estudiates.route('/registrar', methods=['POST'])
+@routes_estudiantes.route('/registrar', methods=['POST'])
 def add_estudiante():
     new_estudiante = request.json
 
@@ -44,7 +44,7 @@ def add_estudiante():
 
 #GET (todos)
 
-@routes_estudiates.route('/lista', methods=['GET'])
+@routes_estudiantes.route('/lista', methods=['GET'])
 def get_estudiantes():
     query = "SELECT * FROM estudiantes"
     estudiantes = fetch_all(query)
@@ -52,7 +52,7 @@ def get_estudiantes():
 
 #GET (por cédula)
 
-@routes_estudiates.route('/consultar/<cedula>', methods=['GET'])
+@routes_estudiantes.route('/consultar/<cedula>', methods=['GET'])
 def get_estudiante(cedula):
     query = "SELECT * FROM estudiantes WHERE cedula = %s"
     estudiante = fetch_one(query, (cedula,))
@@ -61,7 +61,7 @@ def get_estudiante(cedula):
     return jsonify({'message': 'Estudiante no encontrado'}), 404
 
 #PUT (actualizar)
-@routes_estudiates.route('/actualizar/<cedula>', methods=['PUT'])
+@routes_estudiantes.route('/actualizar/<cedula>', methods=['PUT'])
 def update_estudiante(cedula):
     update_data = request.json
     query = '''
@@ -75,7 +75,7 @@ def update_estudiante(cedula):
 
 #DELETE
 
-@routes_estudiates.route('/eliminar/<cedula>', methods=['DELETE'])
+@routes_estudiantes.route('/eliminar/<cedula>', methods=['DELETE'])
 def delete_estudiante(cedula):
     # Verificar si el estudiante existe
     query = "SELECT id FROM estudiantes WHERE cedula = %s"

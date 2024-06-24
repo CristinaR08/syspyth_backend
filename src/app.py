@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 from config import config
-from routes.routesEstudiante import routes_estudiates
+from routes.routesEstudiante import routes_estudiantes
 from routes.routesDocente import routes_docentes
 from routes.routesAdministrador import routes_administrador
 from routes.routesRegistroEstudiantes import registro_estudiantes_routes
@@ -20,7 +20,7 @@ with app.app_context():
     create_tables()
 
 # Registrar rutas
-app.register_blueprint(routes_estudiates, url_prefix='/api/v1.0/estudiantes')
+app.register_blueprint(routes_estudiantes, url_prefix='/api/v1.0/estudiantes')
 app.register_blueprint(routes_docentes, url_prefix='/api/v1.0/docentes')
 app.register_blueprint(routes_administrador, url_prefix='/api/v1.0/administrador')
 app.register_blueprint(registro_estudiantes_routes, url_prefix='/api/v1.0/registro_estudiantes')
