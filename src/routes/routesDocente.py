@@ -43,7 +43,6 @@ def add_docente():
     return jsonify({'message': 'Docente añadido exitosamente', 'id': docente_id}), 201
 
 #GET (todos)
-
 @routes_docentes.route('/lista', methods=['GET'])
 def get_docentes():
     query = "SELECT * FROM docentes"
