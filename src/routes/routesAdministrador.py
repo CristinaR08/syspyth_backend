@@ -65,6 +65,19 @@ def get_administrador(cedula):
         return jsonify(admin)
     return jsonify({'message': 'Administrador no existente'}), 404
 
+@routes_administrador.route('/autenticar', methods=['POST'])
+def autenticar_admin():
+    credentials = request.json
+    cedula = credentials.get('cedula')
+    contraseña = credentials.get('contraseña')
+
+    query = "SELECT * FROM administradores WHERE cedula = %s AND contraseña = %s"
+    admin = fetch_one(query, (cedula, contraseña))
+
+    if admin:
+        return jsonify({'valido': True})
+    return jsonify({'valido': False}), 401
+
 # UPDATE
 @routes_administrador.route('/actualizar/<cedula>', methods=['PUT'])
 def update_administrador(cedula):

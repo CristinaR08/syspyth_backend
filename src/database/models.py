@@ -22,7 +22,8 @@ def create_tables():
         nombre VARCHAR(100) NOT NULL,
         apellido VARCHAR(100) NOT NULL,
         correo VARCHAR(100) NOT NULL,
-        contraseña VARCHAR(100) NOT NULL
+        contraseña VARCHAR(100) NOT NULL,
+        Administrador BOOLEAN NOT NULL DEFAULT FALSE
     )
     '''
     execute_query(docentes_query)
@@ -35,8 +36,8 @@ def create_tables():
         nombre VARCHAR(100) NOT NULL,
         apellido VARCHAR(100) NOT NULL,
         correo VARCHAR(100) NOT NULL,
-        username VARCHAR(20) UNIQUE NOT NULL,
-        contraseña VARCHAR(255) NOT NULL
+        contraseña VARCHAR(255) NOT NULL,
+        Administrador BOOLEAN NOT NULL DEFAULT TRUE
     );
     '''
     execute_query(administradores_query)

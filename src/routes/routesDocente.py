@@ -58,6 +58,20 @@ def get_docente(cedula):
         return jsonify(docente)
     return jsonify({'message': 'Docente no encontrado'}), 404
 
+#Autenticar docente
+@routes_docentes.route('/autenticar', methods=['POST'])
+def autenticar_docente():
+    credentials = request.json
+    cedula = credentials.get('cedula')
+    contraseña = credentials.get('contraseña')
+
+    query = "SELECT * FROM docentes WHERE cedula = %s AND contraseña = %s"
+    docente = fetch_one(query, (cedula, contraseña))
+
+    if docente:
+        return jsonify({'valido': True})
+    return jsonify({'valido': False}), 401
+
 #PUT(actualizar)
 @routes_docentes.route('/actualizar/<cedula>', methods=['PUT'])
 def update_docente(cedula):
