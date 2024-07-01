@@ -45,7 +45,6 @@ def create_tables():
     #Tabla registrto estudiantes
     registro_estudiantes_query =  '''
     CREATE TABLE IF NOT EXISTS registro_estudiantes(
-        id SERIAL PRIMARY KEY,
         cedula VARCHAR(10) NOT NULL,
         nombre VARCHAR(100) NOT NULL,
         apellido VARCHAR(100) NOT NULL,

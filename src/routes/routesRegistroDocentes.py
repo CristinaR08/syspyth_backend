@@ -16,7 +16,7 @@ def confirmar_registro():
     paralelo = data['paralelo']
     semestre = data['semestre']
     sala = data['sala']
-    estudiante_ids = data['estudiante_ids']  # Lista de IDs de estudiantes a confirmar
+    estudiante_ids = data['estudiante_ids']  #Lista de IDs de estudiantes a confirmar
 
     for estudiante_id in estudiante_ids:
         # Actualizar el registro del estudiante para marcarlo como confirmado

@@ -47,11 +47,33 @@ def registrar_estudiante():
 
     return jsonify({'message': 'Estudiante registrado exitosamente'}), 201
 
-@registro_estudiantes_routes.route('/no_confirmados', methods=['GET'])
-def get_estudiantes_no_confirmados():
-    query = "SELECT * FROM registro_estudiantes WHERE confirmado = FALSE"
-    estudiantes_no_confirmados = fetch_all(query)
-    return jsonify(estudiantes_no_confirmados)
+# Ruta para obtener la lista de estudiantes registrados en un intervalo de tiempo específico
+@registro_estudiantes_routes.route('/listaEstudiantes', methods=['GET'])
+def lista_estudiantes():
+    sala = request.args.get('sala')
+    inicio = request.args.get('inicio')
+    fin = request.args.get('fin')
+
+    if not sala or not inicio or not fin:
+        return jsonify({'error': 'Faltan parámetros requeridos'}), 400
+
+    try:
+        hora_inicio = datetime.strptime(inicio, '%H:%M').time()
+        hora_fin = datetime.strptime(fin, '%H:%M').time()
+    except ValueError:
+        return jsonify({'error': 'Formato de hora inválido'}), 400
+
+    query = '''
+    SELECT * FROM registro_estudiantes 
+    WHERE sala = %s AND DATE(fecha_hora) = CURDATE() 
+    AND TIME(fecha_hora) BETWEEN %s AND %s
+    '''
+    estudiantes = fetch_all(query, (sala, hora_inicio, hora_fin))
+
+    if not estudiantes:
+        return jsonify({'message': 'No se encontraron estudiantes registrados en ese intervalo de tiempo'}), 404
+
+    return jsonify(estudiantes), 200
 
 #GET(fecha)
 @registro_estudiantes_routes.route('/fecha', methods=['GET']) #/fecha?fecha=2024-06-07
@@ -75,39 +97,6 @@ def get_maquina(numero_maquina):
         return jsonify({'message' : '"No se encontraron registros con ese número de máquina'}),404
     return jsonify(registros)
 
-
-@registro_estudiantes_routes.route('/listaEstudiantes', methods=['GET'])
-def get_estudiantes_por_sala_y_horario():
-    sala = request.args.get('sala')
-    inicio = request.args.get('inicio')
-    fin = request.args.get('fin')
-
-    if not sala or not inicio or not fin:
-        return jsonify({'error': 'Faltan parámetros necesarios'}), 400
-
-    try:
-        formato = '%H:%M'  # Formato para la comparación de horas
-
-        # Convertir inicio y fin a objetos datetime
-        hora_inicio = datetime.strptime(inicio, formato).time()
-        hora_fin = datetime.strptime(fin, formato).time()
-
-        # Consulta para obtener estudiantes según sala y rango de horas
-        query = """
-        SELECT nombre, apellido, cedula, asistencia
-        FROM registro_estudiantes
-        WHERE sala = %s 
-        AND TIME(fecha_hora) BETWEEN %s AND %s
-        """
-        registros = fetch_all(query, (sala, hora_inicio, hora_fin))
-
-        if not registros:
-            return jsonify({'message': 'No se encontraron registros para los parámetros dados'}), 404
-
-        return jsonify(registros)
-
-    except ValueError:
-        return jsonify({'error': 'Formato de hora incorrecto, debe ser HH:MM'}), 400
 
 # UPDATE quizá se elimine
 @registro_estudiantes_routes.route('/actualizar/<int:id>', methods=['PUT'])
