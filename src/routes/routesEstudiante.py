@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from database.db import execute_query, fetch_all, fetch_one
+import datetime
 
 routes_estudiantes = Blueprint('routes_estudiante', __name__)
 
@@ -59,6 +60,7 @@ def get_estudiante(cedula):
     if estudiante:
         return jsonify(estudiante)
     return jsonify({'message': 'Estudiante no encontrado'}), 404
+
 
 #PUT (actualizar)
 @routes_estudiantes.route('/actualizar/<cedula>', methods=['PUT'])

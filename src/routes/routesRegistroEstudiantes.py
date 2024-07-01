@@ -75,6 +75,40 @@ def get_maquina(numero_maquina):
         return jsonify({'message' : '"No se encontraron registros con ese número de máquina'}),404
     return jsonify(registros)
 
+
+@registro_estudiantes_routes.route('/listaEstudiantes', methods=['GET'])
+def get_estudiantes_por_sala_y_horario():
+    sala = request.args.get('sala')
+    inicio = request.args.get('inicio')
+    fin = request.args.get('fin')
+
+    if not sala or not inicio or not fin:
+        return jsonify({'error': 'Faltan parámetros necesarios'}), 400
+
+    try:
+        formato = '%H:%M'  # Formato para la comparación de horas
+
+        # Convertir inicio y fin a objetos datetime
+        hora_inicio = datetime.strptime(inicio, formato).time()
+        hora_fin = datetime.strptime(fin, formato).time()
+
+        # Consulta para obtener estudiantes según sala y rango de horas
+        query = """
+        SELECT nombre, apellido, cedula, asistencia
+        FROM registro_estudiantes
+        WHERE sala = %s 
+        AND TIME(fecha_hora) BETWEEN %s AND %s
+        """
+        registros = fetch_all(query, (sala, hora_inicio, hora_fin))
+
+        if not registros:
+            return jsonify({'message': 'No se encontraron registros para los parámetros dados'}), 404
+
+        return jsonify(registros)
+
+    except ValueError:
+        return jsonify({'error': 'Formato de hora incorrecto, debe ser HH:MM'}), 400
+
 # UPDATE quizá se elimine
 @registro_estudiantes_routes.route('/actualizar/<int:id>', methods=['PUT'])
 def update_registro_estudiante(id):

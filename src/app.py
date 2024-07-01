@@ -12,14 +12,14 @@ from database.models import create_tables
 app = Flask(__name__)
 CORS(app)
 
-# Configuración de la aplicación
+#Configuración de la aplicación
 app.config.from_object(config['development'])
 
-# Crear tablas si no existen
+#Crear tablas si no existen
 with app.app_context():
     create_tables()
 
-# Registrar rutas
+#Registrar rutas
 app.register_blueprint(routes_estudiantes, url_prefix='/api/v1.0/estudiantes')
 app.register_blueprint(routes_docentes, url_prefix='/api/v1.0/docentes')
 app.register_blueprint(routes_administrador, url_prefix='/api/v1.0/administrador')

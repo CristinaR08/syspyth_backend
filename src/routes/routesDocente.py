@@ -69,7 +69,7 @@ def autenticar_docente():
     docente = fetch_one(query, (cedula, contraseña))
 
     if docente:
-        return jsonify({'valido': True})
+        return jsonify({'valido': True, 'nombre': docente['nombre'], 'apellido': docente['apellido']})
     return jsonify({'valido': False}), 401
 
 #PUT(actualizar)
